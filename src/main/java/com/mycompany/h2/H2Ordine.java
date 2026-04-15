@@ -42,7 +42,7 @@ public class H2Ordine {
         stmt.setString(5, ordine.stato);
         stmt.executeUpdate();
         H2Prodotto h2Prodotto = new H2Prodotto();
-        h2Prodotto.updateStock(ordine.quantita, ordine.idProdotto);
+        h2Prodotto.updateStock(ordine.quantita, ordine.idProdotto, false);
         conn.close();
     }
     
@@ -78,6 +78,10 @@ public class H2Ordine {
         List<Ordine> righeOrdine = getOrder(idOrdine);
         if(righeOrdine != null || righeOrdine.get(0).getStato().equals("Ordinato") || righeOrdine.get(0).getStato() == null){
             stmt.executeUpdate("DELETE FROM ordine WHERE idOrdine = " + idOrdine);
+            H2Prodotto h2Prodotto = new H2Prodotto();
+            for (Ordine ordine : righeOrdine) {
+                h2Prodotto.updateStock(ordine.quantita, ordine.idProdotto, true);
+            }
             conn.close();
             return true;
         } else {

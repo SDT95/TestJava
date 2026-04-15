@@ -80,7 +80,7 @@ public class H2Prodotto {
         return prodotti;
     }
      
-    public void updateStock (int ordineQuantita, long idProdotto) throws SQLException{
+    public void updateStock (int ordineQuantita, long idProdotto, boolean increase) throws SQLException{
         Connection conn = DriverManager.getConnection(
             db, // database file
             userName,             // username
@@ -95,9 +95,11 @@ public class H2Prodotto {
         while (rs.next()) {
            stock = rs.getInt("stock");
         }
-        
-        stockNew = stock - ordineQuantita;
-        
+        if(increase){
+            stockNew = stock + ordineQuantita;
+        } else {
+            stockNew = stock - ordineQuantita;
+        }
         stmt.executeUpdate("UPDATE prodotto SET stock = " + stockNew + "  where id = " + idProdotto);
         conn.close();
     }
