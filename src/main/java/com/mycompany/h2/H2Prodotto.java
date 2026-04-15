@@ -7,6 +7,7 @@ package com.mycompany.h2;
 import com.mycompany.entita.Prodotto;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,27 +21,31 @@ import java.util.List;
  */
 public class H2Prodotto {
     
+    private String userName = "sa";
+    private String db = "jdbc:h2:~/test";
+    private String pwd = "";
+    
     public void addProduct (Prodotto prodotto) throws SQLException{
         Connection conn = DriverManager.getConnection(
-            "jdbc:h2:~/test", // database file
-            "sa",             // username
-            ""                // password
-        );
-        Statement stmt = conn.createStatement();
+            db, // database file
+            userName,             // username
+            pwd                // password
+        );        
+        String sql = "INSERT INTO prodotto (codice, nome, stock) VALUES (?, ?, ?)";
         
-        stmt.execute("INSERT INTO prodotto (codice, nome, stock)" +
-             "VALUES ( '" + prodotto.codice +
-             "', ' " + prodotto.nome +
-             "', ' " + prodotto.stock +
-             "')");
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, prodotto.codice);
+        stmt.setString(2, prodotto.nome);
+        stmt.setDouble(3, prodotto.stock);
+        stmt.executeUpdate();
         conn.close();
     }
     
     public Prodotto getProduct (long idProduct) throws SQLException{
         Connection conn = DriverManager.getConnection(
-            "jdbc:h2:~/test", // database file
-            "sa",             // username
-            ""                // password
+            db, // database file
+            userName,             // username
+            pwd                // password
         );
         Statement stmt = conn.createStatement();
         Prodotto prodotto = new Prodotto();
@@ -57,9 +62,9 @@ public class H2Prodotto {
     
     public List<Prodotto> getAllProducts () throws SQLException{
         Connection conn = DriverManager.getConnection(
-            "jdbc:h2:~/test", // database file
-            "sa",             // username
-            ""                // password
+            db, // database file
+            userName,             // username
+            pwd                // password
         );
         Statement stmt = conn.createStatement();
         List<Prodotto> prodotti = new ArrayList<>();
@@ -77,9 +82,9 @@ public class H2Prodotto {
      
     public void updateStock (int ordineQuantita, long idProdotto) throws SQLException{
         Connection conn = DriverManager.getConnection(
-            "jdbc:h2:~/test", // database file
-            "sa",             // username
-            ""                // password
+            db, // database file
+            userName,             // username
+            pwd              // password
         );
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM prodotto where id = " + idProdotto);

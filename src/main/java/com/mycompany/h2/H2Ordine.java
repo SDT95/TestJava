@@ -21,20 +21,25 @@ import java.util.List;
  */
 public class H2Ordine {
     
+    private String userName = "sa";
+    private String db = "jdbc:h2:~/test";
+    private String pwd = "";
+    
     public void addOrder (Ordine ordine) throws SQLException{
         Connection conn = DriverManager.getConnection(
-            "jdbc:h2:~/test", // database file
-            "sa",             // username
-            ""                // password
+            db, // database file
+            userName,             // username
+            pwd                // password
         );
         
-        String sql = "INSERT INTO ordine (idOrdine, idCliente, idProdotto, quantita) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO ordine (idOrdine, idCliente, idProdotto, quantita, stato) VALUES (?, ?, ?, ?, ?)";
         
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setLong(1, (getMaxOrderNumber() + 1));
         stmt.setLong(2, ordine.idCliente);
         stmt.setDouble(3, ordine.idProdotto);
         stmt.setDouble(4, ordine.quantita);
+        stmt.setString(5, ordine.stato);
         stmt.executeUpdate();
         H2Prodotto h2Prodotto = new H2Prodotto();
         h2Prodotto.updateStock(ordine.quantita, ordine.idProdotto);
@@ -43,9 +48,9 @@ public class H2Ordine {
     
     public List<Ordine> getOrder (int idOrdine) throws SQLException{
         Connection conn = DriverManager.getConnection(
-            "jdbc:h2:~/test", // database file
-            "sa",             // username
-            ""                // password
+            db, // database file
+            userName,             // username
+            pwd                // password
         );
         Statement stmt = conn.createStatement();
         List<Ordine> righeOrdine = new ArrayList<>();
@@ -56,6 +61,7 @@ public class H2Ordine {
             ordine.setIdProdotto(rs.getLong("idProdotto"));
             ordine.setIdOrdine(rs.getLong("idOrdine"));
             ordine.setQuantita(rs.getInt("quantita"));
+            ordine.setStato(rs.getString("stato"));
             righeOrdine.add(ordine);
         }
         conn.close();
@@ -65,9 +71,9 @@ public class H2Ordine {
     
     public List<Ordine> getAllOrders () throws SQLException{
         Connection conn = DriverManager.getConnection(
-            "jdbc:h2:~/test", // database file
-            "sa",             // username
-            ""                // password
+            db, // database file
+            userName,             // username
+            pwd                // password
         );
         Statement stmt = conn.createStatement();
         List<Ordine> righeOrdine = new ArrayList<>();
@@ -79,6 +85,7 @@ public class H2Ordine {
             ordine.setIdProdotto(rs.getLong("idProdotto"));
             ordine.setIdOrdine(rs.getLong("idOrdine"));
             ordine.setQuantita(rs.getInt("quantita"));
+            ordine.setStato(rs.getString("stato"));
             righeOrdine.add(ordine);
         }
         conn.close();
@@ -87,9 +94,9 @@ public class H2Ordine {
     
     public Long getMaxOrderNumber () throws SQLException{
         Connection conn = DriverManager.getConnection(
-            "jdbc:h2:~/test", // database file
-            "sa",             // username
-            ""                // password
+            db, // database file
+            userName,             // username
+            pwd                // password
         );
         Statement stmt = conn.createStatement();
         Long maxOrderId = null;

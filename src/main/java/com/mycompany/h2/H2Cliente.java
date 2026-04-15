@@ -20,15 +20,19 @@ import java.util.List;
  */
 public class H2Cliente {
     
+    private String userName = "sa";
+    private String db = "jdbc:h2:~/test";
+    private String pwd = "";
+    
     public void addCostumer (Cliente cliente) throws SQLException{
         Connection conn = DriverManager.getConnection(
-            "jdbc:h2:~/test", // database file
-            "sa",             // username
-            ""                // password
+            db, // database file
+            userName,             // username
+            pwd                // password
         );
         Statement stmt = conn.createStatement();
         
-        stmt.execute("INSERT INTO cliente (nome, cognome, dataDiNascita, codiceFisdcale, email)" +
+        stmt.execute("INSERT INTO cliente (nome, cognome, dataDiNascita, codiceFiscale, email)" +
              "VALUES ( '" + cliente.nome +
              "', ' " + cliente.cognome +
              "', ' " + cliente.dataDiNascita +
@@ -40,9 +44,9 @@ public class H2Cliente {
     
     public Cliente getCostumer (long idUSer) throws SQLException{
         Connection conn = DriverManager.getConnection(
-            "jdbc:h2:~/test", // database file
-            "sa",             // username
-            ""                // password
+            db, // database file
+            userName,             // username
+            pwd                // password
         );
         Statement stmt = conn.createStatement();
         Cliente cliente = new Cliente();
@@ -60,9 +64,9 @@ public class H2Cliente {
     }    
     public List<Cliente> getAllCostumers () throws SQLException{
         Connection conn = DriverManager.getConnection(
-            "jdbc:h2:~/test", // database file
-            "sa",             // username
-            ""                // password
+            db, // database file
+            userName,             // username
+            pwd                // password
         );
         Statement stmt = conn.createStatement();
         List<Cliente> clienti = new ArrayList<>();

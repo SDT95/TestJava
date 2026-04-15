@@ -27,7 +27,7 @@ public class api {
         return "API OK";
     }
     
-    @GetMapping("/addCostumer")
+    @PostMapping("/addCostumer")
     public String addCostumer(@RequestBody Cliente cliente) throws SQLException {
         H2Cliente h2Cliente = new H2Cliente();
         h2Cliente.addCostumer(cliente);
