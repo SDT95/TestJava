@@ -56,7 +56,7 @@ public class Project_Test {
              "idOrdine INTEGER, " +
              "idCliente INTEGER, " +
              "idProdotto INTEGER, " +
-             "quantita INTEGER " +
+             "quantita INTEGER, " +
              "stato VARCHAR(255) " +
              ")");
         
