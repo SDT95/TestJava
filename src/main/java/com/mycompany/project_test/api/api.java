@@ -81,13 +81,28 @@ public class api {
         }
     }
     
+    @GetMapping("/getOrder/{idOrder}")
+    public String getOrder(@PathVariable long idOrder) throws SQLException {
+        H2Ordine h2Ordine = new H2Ordine();
+        List<Ordine> ordini = h2Ordine.getOrder(idOrder);
+        return ordini.toString();
+    }
+    
+    @GetMapping("/deleteOrder/{idOrder}")
+    public String deleteOrder(@PathVariable long idOrder) throws SQLException {
+        H2Ordine h2Ordine = new H2Ordine();
+        if(h2Ordine.deleteOrder(idOrder)){
+            return "Ordine Cancellato";
+        } else {
+            return "Ordine NON Cancellato";
+        }
+    }
+    
     @GetMapping("/getAllOrders")
     public String getAllOrders() throws SQLException {
         H2Ordine h2Ordine = new H2Ordine();
         List<Ordine> ordini = h2Ordine.getAllOrders();
         return ordini.toString();
     }
-    
-    
     
 }

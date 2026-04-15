@@ -46,7 +46,7 @@ public class H2Ordine {
         conn.close();
     }
     
-    public List<Ordine> getOrder (int idOrdine) throws SQLException{
+    public List<Ordine> getOrder (long idOrdine) throws SQLException{
         Connection conn = DriverManager.getConnection(
             db, // database file
             userName,             // username
@@ -54,7 +54,7 @@ public class H2Ordine {
         );
         Statement stmt = conn.createStatement();
         List<Ordine> righeOrdine = new ArrayList<>();
-        ResultSet rs =stmt.executeQuery("SELECT * FROM ordine where ID = " + idOrdine);
+        ResultSet rs =stmt.executeQuery("SELECT * FROM ordine where idOrdine = " + idOrdine);
         while (rs.next()) {
             Ordine ordine = new Ordine();
             ordine.setIdCliente(rs.getLong("idCliente"));
@@ -66,7 +66,25 @@ public class H2Ordine {
         }
         conn.close();
         return righeOrdine;
-    }   
+    }
+    
+    public boolean deleteOrder (long idOrdine) throws SQLException{
+        Connection conn = DriverManager.getConnection(
+            db, // database file
+            userName,             // username
+            pwd                // password
+        );
+        Statement stmt = conn.createStatement();
+        List<Ordine> righeOrdine = getOrder(idOrdine);
+        if(righeOrdine != null || righeOrdine.get(0).getStato().equals("Ordinato") || righeOrdine.get(0).getStato() == null){
+            stmt.executeUpdate("DELETE FROM ordine WHERE idOrdine = " + idOrdine);
+            conn.close();
+            return true;
+        } else {
+            conn.close();
+            return false;
+        }
+    }    
     
     
     public List<Ordine> getAllOrders () throws SQLException{
